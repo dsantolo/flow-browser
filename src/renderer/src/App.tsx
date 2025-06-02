@@ -3,6 +3,7 @@ import { Route } from "./router/route";
 import { Toaster } from "sonner";
 import { PlatformProvider } from "@/components/main/platform";
 import { QueryParamProvider } from "use-query-params";
+import { ThemeProvider } from "@/components/main/theme";
 import { WindowHistoryAdapter } from "use-query-params/adapters/window";
 
 // Protocols //

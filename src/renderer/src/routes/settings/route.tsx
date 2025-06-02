@@ -1,7 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
+import { ThemeProvider } from "@/components/main/theme";
 
 export default function Route() {
-  const [Page, setPage] = useState<ReactNode>(null);
+  const [Page, setPage] = useState<ReactNode>(
+    <div className="h-screen bg-background flex items-center justify-center"></div>
+  );
 
   useEffect(() => {
     import("./page").then((module) => {
@@ -10,5 +13,5 @@ export default function Route() {
     });
   }, []);
 
-  return Page;
+  return <ThemeProvider>{Page}</ThemeProvider>;
 }
