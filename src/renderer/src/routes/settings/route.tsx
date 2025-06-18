@@ -1,15 +1,14 @@
-import { ReactNode, useEffect, useState } from "react";
-import { ThemeProvider } from "@/components/main/theme";
+import { lazy, Suspense } from "react";
+import { RouteConfig } from "./config";
+
+const PageComponent = lazy(() => import("./page"));
 
 export default function Route() {
-  const [Page, setPage] = useState<ReactNode>(<div className="h-screen w-screen bg-background"></div>);
-
-  useEffect(() => {
-    import("./page").then((module) => {
-      const Page = module.default;
-      setPage(<Page />);
-    });
-  }, []);
-
-  return <ThemeProvider>{Page}</ThemeProvider>;
+  return (
+    <RouteConfig.Providers>
+      <Suspense fallback={RouteConfig.Fallback}>
+        <PageComponent />
+      </Suspense>
+    </RouteConfig.Providers>
+  );
 }

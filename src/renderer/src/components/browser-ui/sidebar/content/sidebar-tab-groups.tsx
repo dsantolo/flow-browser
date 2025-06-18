@@ -20,6 +20,7 @@ export function SidebarTab({ tab, isFocused }: { tab: TabData; isFocused: boolea
   const [cachedFaviconUrl, setCachedFaviconUrl] = useState<string | null>(tab.faviconURL);
   const [isError, setIsError] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const noFavicon = !cachedFaviconUrl || isError;
 
   const isMuted = tab.muted;
@@ -89,6 +90,8 @@ export function SidebarTab({ tab, isFocused }: { tab: TabData; isFocused: boolea
     <MotionSidebarMenuButton
       key={tab.id}
       onContextMenu={handleContextMenu}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={cn(
         "bg-transparent active:bg-transparent",
         !isFocused && "hover:bg-black/5 hover:dark:bg-white/10",
@@ -96,11 +99,12 @@ export function SidebarTab({ tab, isFocused }: { tab: TabData; isFocused: boolea
         isFocused && "bg-white dark:bg-white/25",
         isFocused && "active:bg-white active:dark:bg-white/25",
         "text-gray-900 dark:text-gray-200",
-        "transition-colors"
+        "transition-colors",
+        tab.asleep && "grayscale"
       )}
       initial={{ opacity: 0, x: -10 }}
       animate={{
-        opacity: 1,
+        opacity: tab.asleep ? 0.5 : 1,
         x: 0,
         scale: isPressed ? 0.985 : 1
       }}
@@ -166,17 +170,19 @@ export function SidebarTab({ tab, isFocused }: { tab: TabData; isFocused: boolea
           {/* Right side */}
           <div className={cn("flex flex-row items-center gap-0.5", open && "flex-shrink-0")}>
             {/* Close tab button */}
-            <motion.div whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleCloseTab}
-                className="size-5 bg-transparent rounded-sm hover:bg-black/10 dark:hover:bg-white/10"
-                onMouseDown={(event) => event.stopPropagation()}
-              >
-                <XIcon className="size-4 text-muted-foreground dark:text-white" />
-              </Button>
-            </motion.div>
+            {isHovered && (
+              <motion.div whileTap={{ scale: 0.95 }} className="flex items-center justify-center">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleCloseTab}
+                  className="size-5 bg-transparent rounded-sm hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center"
+                  onMouseDown={(event) => event.stopPropagation()}
+                >
+                  <XIcon className="size-4 text-muted-foreground dark:text-white" />
+                </Button>
+              </motion.div>
+            )}
           </div>
         </>
       </div>

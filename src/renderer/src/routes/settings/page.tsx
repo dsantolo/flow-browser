@@ -4,8 +4,4 @@ function Page() {
   return <SettingsLayout />;
 }
 
-function App() {
-  return <Page />;
-}
-
-export default App;
+export default Page;
